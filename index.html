@@ -8,9 +8,17 @@
 </head>
 <body>
   <h1>TXT to EPUB</h1>
-  <button id="login">Login</button>
-  <input type="file" id="file" accept=".txt">
-  <button id="upload">Upload & Convert</button>
+
+  <div id="login-area">
+    <input type="email" id="email" placeholder="Email"><br>
+    <input type="password" id="password" placeholder="Password"><br>
+    <button id="login">Login</button>
+  </div>
+
+  <div id="upload-area" style="display: none;">
+    <input type="file" id="file" accept=".txt">
+    <button id="upload">Upload & Convert</button>
+  </div>
 
   <script>
     const firebaseConfig = {
@@ -28,10 +36,18 @@
     let idToken = null;
 
     document.getElementById("login").onclick = async () => {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      const result = await auth.signInWithPopup(provider);
-      idToken = await result.user.getIdToken();
-      alert("Login success!");
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      try {
+        const result = await auth.signInWithEmailAndPassword(email, password);
+        idToken = await result.user.getIdToken();
+        document.getElementById("login-area").style.display = "none";
+        document.getElementById("upload-area").style.display = "block";
+        alert("Login success!");
+      } catch (e) {
+        alert("Login failed: " + e.message);
+      }
     };
 
     document.getElementById("upload").onclick = async () => {
@@ -58,11 +74,4 @@
       }
 
       const blob = await res.blob();
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "converted.epub";
-      a.click();
-    };
-  </script>
-</body>
-</html>
+      const a = document.cre
