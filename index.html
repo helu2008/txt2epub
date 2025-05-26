@@ -22,13 +22,13 @@
 
   <script>
     const firebaseConfig = {
-  apiKey: "AIzaSyDTbJ4ijjEIPtId1T8cLLijU3gbej-x9IU",
-  authDomain: "txt2epub-d9378.firebaseapp.com",
-  projectId: "txt2epub-d9378",
-  storageBucket: "txt2epub-d9378.firebasestorage.app",
-  messagingSenderId: "885899986091",
-  appId: "1:885899986091:web:1bdf7ff0ca23a6b3fe63ee"
-};
+      apiKey: "AIzaSyDTbJ4ijjEIPtId1T8cLLijU3gbej-x9IU",
+      authDomain: "txt2epub-d9378.firebaseapp.com",
+      projectId: "txt2epub-d9378",
+      storageBucket: "txt2epub-d9378.firebasestorage.app",
+      messagingSenderId: "885899986091",
+      appId: "1:885899986091:web:1bdf7ff0ca23a6b3fe63ee"
+    };
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
@@ -47,6 +47,7 @@
         alert("Login success!");
       } catch (e) {
         alert("Login failed: " + e.message);
+        console.error(e);
       }
     };
 
@@ -60,18 +61,30 @@
       const formData = new FormData();
       formData.append("file", fileInput.files[0]);
 
-      const res = await fetch("https://cold-hat-4018.hengweilu0104.workers.dev/", {
-        method: "POST",
-        headers: {
-          "Authorization": "Bearer " + idToken
-        },
-        body: formData
-      });
+      try {
+        const res = await fetch("https://cold-hat-4018.hengweilu0104.workers.dev/", {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer " + idToken
+          },
+          body: formData
+        });
 
-      if (!res.ok) {
-        alert("Error: " + res.status);
-        return;
+        if (!res.ok) {
+          alert("Error: " + res.status);
+          return;
+        }
+
+        const blob = await res.blob();
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "converted.epub";
+        a.click();
+      } catch (e) {
+        alert("Upload failed: " + e.message);
+        console.error(e);
       }
-
-      const blob = await res.blob();
-      const a = document.cre
+    };
+  </script>
+</body>
+</html>
