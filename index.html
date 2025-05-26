@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TXT to EPUB</title>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 2em; }
+    h1 { font-size: 1.5em; }
+    input[type="file"] { margin-bottom: 1em; }
+  </style>
+</head>
+<body>
+  <h1>TXT to EPUB Converter</h1>
+  <input type="file" id="fileInput" multiple accept=".txt">
+  <button onclick="convert()">Convert</button>
+  <div id="log"></div>
+  <script type="text/javascript">
+    let pyodide;
+    async function init() {
+      pyodide = await loadPyodide();
+      const pycode = await (await fetch('main.py')).text();
+      await pyodide.runPythonAsync(pycode);
+      document.getElementById("log").innerText = "Ready.";
+    }
+    async function convert() {
+      const input = document.getElementById("fileInput");
+      const log = document.getElementById("log");
+      if (!input.files.length) {
+        alert("Select .txt files first.");
+        return;
+      }
+      for (const file of input.files) {
+        const data = new Uint8Array(await file.arrayBuffer());
+        pyodide.FS.writeFile(file.name, data);
+        log.innerText = `Processing ${file.name}...`;
+        await pyodide.runPythonAsync(`convert("${file.name}")`);
+        const outFile = file.name.replace(/\.txt$/, ".epub");
+        const outData = pyodide.FS.readFile(outFile);
+        const blob = new Blob([outData], { type: "application/epub+zip" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = outFile;
+        a.innerText = `Download ${outFile}`;
+        document.body.appendChild(a);
+        document.body.appendChild(document.createElement("br"));
+      }
+      log.innerText = "Done.";
+    }
+    init();
+  </script>
+</body>
+</html>
