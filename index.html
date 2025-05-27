@@ -21,7 +21,6 @@
   </div>
 
   <script>
-    // ✅ 替换为你自己的 Firebase 项目配置
     const firebaseConfig = {
       apiKey: "AIzaSyDTbJ4ijjEIPtId1T8cLLijU3gbej-x9IU",
       authDomain: "txt2epub-d9378.firebaseapp.com",
@@ -61,10 +60,14 @@
       }
 
       for (let i = 0; i < files.length; i++) {
-        const formData = new FormData();
-        formData.append("file", files[i]);
-
         try {
+          // 关键：读取为ArrayBuffer保持原始字节
+          const arrayBuffer = await files[i].arrayBuffer();
+          const blob = new Blob([arrayBuffer], { type: 'application/octet-stream' });
+          
+          const formData = new FormData();
+          formData.append("file", blob, files[i].name);
+
           const res = await fetch("https://cold-hat-4018.hengweilu0104.workers.dev/", {
             method: "POST",
             headers: {
@@ -78,11 +81,14 @@
             continue;
           }
 
-          const blob = await res.blob();
+          const responseBlob = await res.blob();
           const a = document.createElement("a");
-          a.href = URL.createObjectURL(blob);
+          a.href = URL.createObjectURL(responseBlob);
           a.download = files[i].name.replace(/\.txt$/, ".epub");
           a.click();
+          
+          setTimeout(() => URL.revokeObjectURL(a.href), 100);
+          
         } catch (e) {
           alert("Upload failed: " + e.message);
           console.error(e);
