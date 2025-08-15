@@ -12,7 +12,7 @@ def read_text(filename):
 
 def convert(filename):
     text = read_text(filename)
-    parts = re.split(r'(第[一二三四五六七八九十百千0-9]+[章节].*?)\n', text)
+    parts = re.split(r'(第[一二三四五六七八九十百千0-9]+[章].*?)\n', text)
     chapters = []
     if len(parts) >= 3:
         for i in range(1, len(parts), 2):
@@ -39,3 +39,4 @@ def convert(filename):
     book.add_item(epub.EpubNcx())
     book.add_item(epub.EpubNav())
     epub.write_epub(title + '.epub', book, {})
+
