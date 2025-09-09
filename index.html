@@ -84,7 +84,10 @@
           const responseBlob = await res.blob();
           const a = document.createElement("a");
           a.href = URL.createObjectURL(responseBlob);
-          a.download = files[i].name.replace(/\.txt$/, ".epub");
+          let cleanName = files[i].name.replace(/\.txt$/, "");
+          cleanName = cleanName.replace(/\(dmxs\.org\)/gi, "");
+          cleanName = cleanName.trim();
+          a.download = cleanName + ".epub";
           a.click();
           
           setTimeout(() => URL.revokeObjectURL(a.href), 100);
@@ -98,3 +101,4 @@
   </script>
 </body>
 </html>
+
