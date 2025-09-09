@@ -24,6 +24,7 @@ def convert(filename):
     book = epub.EpubBook()
     title = filename.replace(".txt", "")
     title = title.replace("(dmxs.org)", "")
+    title = title.strip()
     book.set_title(title)
     book.set_language("zh")
     book.add_author("Unknown")
@@ -40,6 +41,7 @@ def convert(filename):
     book.add_item(epub.EpubNcx())
     book.add_item(epub.EpubNav())
     epub.write_epub(title + '.epub', book, {})
+
 
 
 
