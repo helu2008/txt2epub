@@ -23,7 +23,7 @@ def convert(filename):
         chapters.append(("Content", text.strip().replace('\n', '<br/>')))
     book = epub.EpubBook()
     title = filename.replace(".txt", "")
-    title = title.replace("(dmxs.org)", "")
+    title = re.sub(r'\s*\(\s*dmxs.org\s*\)\s*', '', title, flags=re.IGNORECASE)
     title = title.strip()
     book.set_title(title)
     book.set_language("zh")
@@ -41,6 +41,7 @@ def convert(filename):
     book.add_item(epub.EpubNcx())
     book.add_item(epub.EpubNav())
     epub.write_epub(title + '.epub', book, {})
+
 
 
 
