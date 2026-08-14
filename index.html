@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TXT 转 EPUB 在线转换器 - 纯前端单文件版</title>
-  <meta name="description" content="无需上传服务器，纯前端 JavaScript 在线将中文 TXT 小说转换成标准 EPUB 电子书，支持 GBK/UTF-8 编码识别与正则自动分章。">
+  <title>TXT转EPUB</title>
+  <meta name="description" content="在线将TXT转换成标准EPUB">
   <style>
     /* Modern Light Design System for TXT to EPUB Web Converter */
     :root {
@@ -552,7 +552,7 @@
     <!-- Hero Section -->
     <section class="hero-section">
       <h1 class="hero-title">中文小说 TXT 转 EPUB</h1>
-      <p class="hero-subtitle">智能编码识别 (UTF-8/GBK/Big5) · 正则自动章节分割 · 100% 本地处理</p>
+      <p class="hero-subtitle">智能编码识别 (UTF-8/GBK/Big5) · 自动章节分割</p>
       <div class="limit-badge">⚡ 单次最多支持转换 5 个文件</div>
     </section>
 
@@ -581,7 +581,7 @@
         <div class="form-group">
           <label for="regexPreset">章节识别正则表达式规则</label>
           <select id="regexPreset" class="form-control">
-            <option value="notebook">标准规则：第X章 ( notebook 默认)</option>
+            <option value="notebook">标准规则：第X章</option>
             <option value="flexible">宽松规则：第X章/回/节/卷/集</option>
             <option value="strict">数字规则：第123章</option>
             <option value="custom">自定义正则表达式...</option>
@@ -590,7 +590,7 @@
         </div>
         <div class="form-group">
           <label for="cleanPatternInput">书名净化规则 (逗号分隔)</label>
-          <input type="text" id="cleanPatternInput" class="form-control" value="(dmxs.org), [dmxs.org]" placeholder="要过滤的无用标签">
+          <input type="text" id="cleanPatternInput" class="form-control" value="(example.org), [example.org]" placeholder="要过滤的无用标签">
         </div>
       </div>
     </div>
@@ -613,7 +613,7 @@
       <!-- Action Toolbar -->
       <div class="action-bar">
         <button class="btn-primary" id="convertAllBtn" disabled>
-          🚀 一键全量转换
+          🚀 一键转换
         </button>
         <button class="btn-primary" id="downloadAllBtn" style="background: linear-gradient(135deg, #10b981, #059669);" disabled>
           📦 打包下载全部 (.zip)
@@ -641,7 +641,7 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <p>TXT 转 EPUB 在线转换器 · 纯前端单文件独立版</p>
+    <p>TXT 转 EPUB 在线转换器</p>
     <p style="margin-top: 0.4rem; opacity: 0.7;">所有文件均在您的本地浏览器中解析与生成，绝不上传至任何服务器，保护数据隐私。</p>
   </footer>
 
